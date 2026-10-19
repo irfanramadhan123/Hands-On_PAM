@@ -19,17 +19,14 @@ import androidx.compose.ui.unit.dp
 import com.itera.pam.p3.latihan.Handson1Screen
 import com.itera.pam.p3.latihan.Handson2Screen
 import com.itera.pam.p3.latihan.Handson3Screen
-import com.itera.pam.p3.solusi.Handson1ScreenSolusi
-import com.itera.pam.p3.solusi.Handson2ScreenSolusi
-import com.itera.pam.p3.solusi.Handson3ScreenSolusi
 
 // Menu sederhana berbasis state (BUKAN Navigation Component — itu materi
-// Pertemuan 5) untuk berpindah antar layar latihan/solusi di hands-on ini.
+// Pertemuan 5) untuk berpindah antar layar latihan di hands-on ini.
 private enum class Screen(val label: String) {
     Menu("Menu"),
-    Latihan1("Latihan 1 - ProfileCard"), Solusi1("Solusi 1"),
-    Latihan2("Latihan 2 - Login Form"), Solusi2("Solusi 2"),
-    Latihan3("Latihan 3 - Product List"), Solusi3("Solusi 3"),
+    Latihan1("Latihan 1 - ProfileCard"),
+    Latihan2("Latihan 2 - Login Form"),
+    Latihan3("Latihan 3 - Product List"),
 }
 
 @Composable
@@ -57,11 +54,8 @@ fun App() {
                     }
 
                     Screen.Latihan1 -> Handson1Screen()
-                    Screen.Solusi1 -> Handson1ScreenSolusi()
                     Screen.Latihan2 -> Handson2Screen()
-                    Screen.Solusi2 -> Handson2ScreenSolusi()
                     Screen.Latihan3 -> Handson3Screen()
-                    Screen.Solusi3 -> Handson3ScreenSolusi()
                 }
             }
         }

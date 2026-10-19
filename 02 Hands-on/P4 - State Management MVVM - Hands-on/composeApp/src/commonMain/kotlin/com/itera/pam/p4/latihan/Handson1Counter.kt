@@ -6,28 +6,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 // Latihan 1: Counter App dengan State (slide P4 hal. 29)
-// Tugas: Buat counter dengan increment, decrement, dan reset.
-//
-// Checklist:
-// [ ] State dengan remember
-// [ ] mutableStateOf(0)
-// [ ] Text untuk display
-// [ ] Button increment (+1)
-// [ ] Button decrement (-1)
-// [ ] Button reset (ke 0)
-// [ ] Disable decrement jika 0
+// Counter dengan increment (+1), decrement (-1, nonaktif saat 0), dan reset (ke 0).
 
 @Composable
 fun Handson1Screen() {
-    // TODO: Deklarasikan state untuk count
-    // var count by remember { mutableStateOf(0) }
+    var count by remember { mutableStateOf(0) }
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -36,16 +31,19 @@ fun Handson1Screen() {
     ) {
         Text("Latihan 1: Counter App dengan State")
 
-        // TODO: Tampilkan nilai count, contoh: Text("Count: $count")
+        Text("Count: $count", style = MaterialTheme.typography.headlineMedium)
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = { /* TODO: decrement, jangan sampai < 0 */ }) {
+            Button(
+                onClick = { if (count > 0) count-- },
+                enabled = count > 0
+            ) {
                 Text("-")
             }
-            Button(onClick = { /* TODO: increment */ }) {
+            Button(onClick = { count++ }) {
                 Text("+")
             }
-            Button(onClick = { /* TODO: reset ke 0 */ }) {
+            Button(onClick = { count = 0 }) {
                 Text("Reset")
             }
         }
