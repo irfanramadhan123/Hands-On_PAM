@@ -1,9 +1,9 @@
 import kotlinx.coroutines.*
 
 // Hands-on 1: Coroutines Dasar
-// Tugas: Ambil data dari 2 sumber secara PARALEL menggunakan async/await,
-// lalu gabungkan hasilnya. Total waktu eksekusi harus < 2 detik (bukan ~1800ms
-// yang akan terjadi jika dijalankan secara sequential).
+// Mengambil data dari 2 sumber secara PARALEL menggunakan async/await,
+// lalu menggabungkan hasilnya. Waktu eksekusi mendekati 1000ms (waktu
+// fetch terlama), bukan ~1800ms seperti jika dijalankan secara sequential.
 
 suspend fun fetchUserProfile(userId: String): String {
     delay(1000) // Simulasi network delay
@@ -16,13 +16,16 @@ suspend fun fetchUserPosts(userId: String): List<String> {
 }
 
 fun main() = runBlocking {
-    // TODO 1: Jalankan fetchUserProfile dan fetchUserPosts secara PARALEL dengan async
-    // TODO 2: Tunggu kedua hasil dengan await(), lalu tampilkan dengan println
-    // TODO 3: Ukur waktu eksekusi (harus mendekati 1000ms, bukan 1800ms)
-
     val startTime = System.currentTimeMillis()
 
-    // Kode kamu di sini...
+    val profileDeferred = async { fetchUserProfile("user-1") }
+    val postsDeferred = async { fetchUserPosts("user-1") }
+
+    val profile = profileDeferred.await()
+    val posts = postsDeferred.await()
+
+    println(profile)
+    println("Posts: $posts")
 
     val endTime = System.currentTimeMillis()
     println("Waktu: ${endTime - startTime}ms")
