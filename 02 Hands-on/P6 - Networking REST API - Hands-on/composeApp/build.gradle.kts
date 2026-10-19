@@ -33,7 +33,6 @@ kotlin {
 
     sourceSets {
         val desktopMain by getting
-        val iosMain by getting
 
         androidMain.dependencies {
             implementation(compose.preview)
