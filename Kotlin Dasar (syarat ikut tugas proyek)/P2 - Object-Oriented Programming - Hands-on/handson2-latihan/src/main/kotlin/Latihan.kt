@@ -1,38 +1,32 @@
 // Hands-on 2: Interface & Data Class
-// Tugas: Buat interface Payable dengan fungsi calculateSalary(), lalu implementasikan
-// lewat data class Employee. Manfaatkan fitur bawaan data class: toString(), equals(),
-// dan copy().
+// Solusi: Menggunakan interface untuk fungsi calculateSalary(), data class untuk Employee,
+// serta copy() dan equals() untuk menyalin dan membandingkan isi objek.
 
+// Interface Payable yang mendefinisikan kontrak fungsi hitung gaji tanpa menyimpan state
 interface Payable {
-    // TODO 1: Deklarasikan fungsi abstrak calculateSalary(): Double di interface ini.
     // (Interface tidak bisa punya state, tapi bisa punya fungsi abstrak.)
+    fun calculateSalary(): Double
 }
 
-// TODO 2: Jadikan class ini "data class" agar otomatis mendapat equals(), hashCode(),
-// toString(), dan copy(). Class ini harus implement interface Payable.
-// Property: name (String), baseSalary (Double), bonus (Double).
-class Employee(val name: String, val baseSalary: Double, val bonus: Double) {
+// Data class otomatis menyediakan fungsi equals(), hashCode(), toString(), dan copy()
+data class Employee(val name: String, val baseSalary: Double, val bonus: Double) : Payable {
 
-    // TODO 3: Override calculateSalary() agar mengembalikan baseSalary + bonus.
-    fun calculateSalary(): Double {
-        return 0.0
+    override fun calculateSalary(): Double {
+        return baseSalary + bonus
     }
 }
 
 fun main() {
     val alice = Employee("Alice", baseSalary = 5_000_000.0, bonus = 500_000.0)
 
-    // TODO 4: Gunakan alice.copy(...) untuk membuat "bob" dengan name = "Bob",
-    // baseSalary dan bonus sama seperti alice (tidak perlu ditulis ulang).
-    val bob = alice
+    // Menggunakan fitur copy() untuk menduplikasi objek alice dan hanya mengubah properti name menjadi Bob
+    val bob = alice.copy(name = "Bob")
 
     println("Gaji ${alice.name}: ${alice.calculateSalary()}")
     println("Gaji ${bob.name}: ${bob.calculateSalary()}")
 
-    // TODO 5: Buat "aliceDuplicate" dengan data yang identik dengan alice (name,
-    // baseSalary, bonus sama persis), lalu bandingkan dengan == (equals()).
-    // Data class membandingkan berdasarkan ISI, bukan referensi objek.
-    val aliceDuplicate = alice
+    // Membuat salinan alice dengan data yang sama, lalu membandingkan isi keduanya.
+    val aliceDuplicate = alice.copy()
     println("alice == aliceDuplicate? ${alice == aliceDuplicate}")
 
     // toString() bawaan data class akan mencetak semua property secara otomatis.

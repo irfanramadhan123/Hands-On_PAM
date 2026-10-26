@@ -1,26 +1,22 @@
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.concurrent.thread
 
 // Hands-on 1: Race Condition
-// Tugas: Dua thread meng-increment sebuah shared counter (var c) sebanyak
-// 100_000x masing-masing secara BERSAMAAN. Karena c++ bukan operasi atomik
-// (baca-ubah-tulis, bisa saling menyela/interleave antar thread), hasil akhirnya
-// SERING SALAH (bukan 200_000) — itulah race condition.
-//
-// TODO: Perbaiki class Counter di bawah supaya increment() aman dari race
-// condition, sehingga hasil akhirnya SELALU 200_000 walau dijalankan berkali-kali.
-// Gunakan salah satu: `synchronized(this) { }` ATAU `java.util.concurrent.atomic.AtomicInteger`.
+// Solusi: Menggunakan AtomicInteger agar operasi increment bersifat atomik,
+// sehingga dua thread tidak saling menyela saat menambah nilai counter.
 
 class Counter {
-    private var c = 0
+    // Menyimpan nilai counter dalam AtomicInteger agar aman diakses banyak thread
+    private val c = AtomicInteger(0)
 
     fun increment() {
-        // TODO 1: Bungkus baris di bawah supaya thread-safe
-        c++
+        // Menambah nilai secara atomik (baca-ubah-tulis dalam satu operasi)
+        c.incrementAndGet()
     }
 
     fun value(): Int {
-        // TODO 2: Jika kamu memakai AtomicInteger, sesuaikan cara membaca nilainya di sini
-        return c
+        // Membaca nilai terkini dari AtomicInteger
+        return c.get()
     }
 }
 
