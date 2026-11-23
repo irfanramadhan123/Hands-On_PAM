@@ -1,16 +1,16 @@
 // Hands-on 1: Transformasi Collection
-// Tugas: Dari daftar produk, tampilkan NAMA produk yang harganya di atas
-// sebuah threshold, terurut dari yang termurah ke termahal.
-// Konsep: filter, map, sortedBy
+// Solusi: Menggunakan chaining fungsi collection filter, sortedBy, dan map
 
 data class Product(val nama: String, val harga: Int, val stok: Int)
 
 fun produkDiAtasHarga(produk: List<Product>, minHarga: Int): List<String> {
-    // TODO 1: Saring (filter) produk yang harga-nya > minHarga
-    // TODO 2: Urutkan (sortedBy) hasil saringan dari harga termurah
-    // TODO 3: Ubah (map) menjadi List<String> berisi nama produk saja
-
-    return emptyList()
+    return produk
+        // Menyaring produk yang harganya melebihi batas minHarga
+        .filter { it.harga > minHarga }
+        // Menyaring produk yang lolos dari harga termurah ke termahal
+        .sortedBy { it.harga }
+        // Mengekstrak hanya nama produknya ke dalam List<String>
+        .map { it.nama }
 }
 
 fun main() {

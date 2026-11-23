@@ -1,35 +1,89 @@
 package com.itera.pam.p7.latihan
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.itera.pam.p7.db.AppDatabase
 
 // Hands-on 3: Offline-First — Tampilkan & Hapus Catatan
-// Gunakan CatatanRepository dari Handson2Repository.kt (yang sudah kamu
-// lengkapi) untuk menampilkan daftar catatan dalam LazyColumn, form untuk
-// menambah catatan baru, dan tombol hapus per item.
-//
-// CATATAN: layar ini SENGAJA belum menampilkan apa pun (hanya placeholder
-// di bawah) sampai semua TODO dilengkapi.
+// CatatanRepository dari Handson2Repository.kt dipakai untuk menampilkan
+// daftar catatan dalam LazyColumn, form untuk menambah catatan baru, dan
+// tombol hapus per item. Data disimpan di database lokal, sehingga catatan
+// tetap ada setelah aplikasi ditutup dan dibuka lagi tanpa koneksi internet.
 
 @Composable
 fun Handson3Screen(database: AppDatabase) {
-    // TODO 1: buat val repository = remember { CatatanRepository(database) }
-    // TODO 2: collect repository.getAll() sebagai Compose state, misalnya:
-    //         val catatanList by repository.getAll().collectAsState(initial = emptyList())
-    // TODO 3: tampilkan `catatanList` dengan LazyColumn { items(catatanList) { catatan -> ... } }
-    //         setiap item: Text(catatan.judul), Text(catatan.isi),
-    //         Button("Hapus") { repository.hapus(catatan.id) }
-    // TODO 4: tambahkan 2 OutlinedTextField (judul, isi) + Button("Tambah")
-    //         yang memanggil repository.tambah(judul, isi) lalu mengosongkan field
-    // TODO 5: build & jalankan, tutup aplikasi, lalu buka lagi — catatan
-    //         yang kamu tambahkan harus tetap ada (itulah "offline-first")
+    val repository = remember { CatatanRepository(database) }
+    val catatanList by repository.getAll().collectAsState(initial = emptyList())
 
-    Text(
-        "Belum diimplementasikan — lengkapi TODO 1-5 di atas",
-        modifier = Modifier.padding(16.dp)
-    )
+    var judul by remember { mutableStateOf("") }
+    var isi by remember { mutableStateOf("") }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("Hands-on 3: Offline Notes")
+
+        OutlinedTextField(
+            value = judul,
+            onValueChange = { judul = it },
+            label = { Text("Judul") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        OutlinedTextField(
+            value = isi,
+            onValueChange = { isi = it },
+            label = { Text("Isi") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Button(
+            onClick = {
+                if (judul.isNotBlank()) {
+                    repository.tambah(judul.trim(), isi.trim())
+                    judul = ""
+                    isi = ""
+                }
+            },
+            modifier = Modifier.padding(vertical = 8.dp)
+        ) {
+            Text("Tambah")
+        }
+
+        // Tinggi LazyColumn dibatasi karena App membungkus layar dengan
+        // Column yang bisa di-scroll (tingginya tidak terbatas).
+        LazyColumn(modifier = Modifier.fillMaxWidth().heightIn(max = 500.dp)) {
+            items(catatanList, key = { it.id }) { catatan ->
+                Card(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(catatan.judul, fontWeight = FontWeight.Bold)
+                            Text(catatan.isi)
+                        }
+                        Button(onClick = { repository.hapus(catatan.id) }) {
+                            Text("Hapus")
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

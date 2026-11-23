@@ -1,24 +1,18 @@
 // Hands-on 2: Control Flow — when sebagai Expression
-// Tugas: Lengkapi fungsi gradeOf() yang mengembalikan huruf mutu berdasarkan
-// nilai ujian (0-100), menggunakan `when` sebagai EXPRESSION (bukan statement),
-// sebagai single-expression function.
-//
-// Aturan:
-//   90-100 -> "A"
-//   80-89  -> "B"
-//   70-79  -> "C"
-//   60-69  -> "D"
-//   selain itu -> "E"
+//solusi : when digunakan untuk memntukan grade berdasarkan nilai dan in digunakan
+// untuk cek nilai dalam rentang
 
-fun gradeOf(nilai: Int): String {
-    // TODO: Ganti baris TODO() di bawah ini menjadi single-expression function:
-    //   fun gradeOf(nilai: Int): String = when (nilai) {
-    //       in 90..100 -> "A"
-    //       ...
-    //       else -> "E"
-    //   }
-    TODO("Implementasikan klasifikasi nilai menggunakan when expression")
-}
+// menggunakan when sebagai expresion untuk evaluasi nilai
+fun gradeOf(nilai: Int): String =
+    when (nilai) {
+        // cek rentang 90 -100 dan seterusnya untuk mendapatkan nilai
+        in 90..100 -> "A"
+        in 80..89 -> "B"
+        in 70..79 -> "C"
+        in 60..69 -> "D"
+        //fallback jika nilai diluar rentang di atas
+        else -> "E"
+    }
 
 fun main() {
     val nilaiMahasiswa = listOf(95, 82, 71, 60, 45)
