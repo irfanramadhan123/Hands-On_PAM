@@ -5,26 +5,36 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.itera.pam.p9.getPlatformName
+import com.itera.pam.p9.vibrate
 
 // Hands-on 1: expect/actual Lanjutan — Getar Perangkat
-// `vibrate()` sudah diimplementasikan lewat expect/actual (lihat Platform.kt
-// dan actual-nya di androidMain/iosMain/desktopMain) — tugasmu di sini hanya
-// memanggilnya dari tombol di bawah.
-//
-// TODO 1: import com.itera.pam.p9.vibrate
-// TODO 2: Panggil vibrate() di dalam onClick tombol
-// TODO 3: Tambahkan Text yang menjelaskan platform mana yang benar-benar
-//         bergetar (Android & iOS bergetar sungguhan, Desktop hanya
-//         mencetak log ke console)
+// Solusi: Memanggil vibrate() (expect/actual) dari tombol, menampilkan
+// platform yang sedang berjalan dan penjelasan perilaku getar per platform.
 
 @Composable
 fun Handson1Screen() {
+    var jumlahGetar by remember { mutableStateOf(0) }
+
     Column(modifier = Modifier.padding(16.dp)) {
         Text("Hands-on 1: Getar Perangkat (expect/actual)")
-        Button(onClick = { /* TODO 2 */ }) {
+        Text("Platform: ${getPlatformName()}")
+        Button(onClick = {
+            vibrate()
+            jumlahGetar++
+        }) {
             Text("Getar!")
         }
+        Text("Tombol getar ditekan $jumlahGetar kali")
+        Text(
+            "Catatan: Android & iOS bergetar sungguhan, sedangkan Desktop " +
+                "hanya mencetak log ke console (no-op)."
+        )
     }
 }
